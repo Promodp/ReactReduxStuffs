@@ -1,17 +1,27 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import "./App.css";
 
 const App = () => {
-  const [todos, setTodos] = useState([
-    {
-      text: "",
-      isEdit: false,
-      isCompleted: false,
-    },
-  ]);
-
   const [value, setValue] = useState("");
   const [newValue, setNewValue] = useState("");
+  const [todos, setTodos] = useState(() => {
+    const savedTodos = localStorage.getItem("todos");
+    if (savedTodos) {
+      return JSON.parse(savedTodos);
+    } else {
+      return [
+        {
+          text: "",
+          isEdit: false,
+          isCompleted: false,
+        },
+      ];
+    }
+  });
+
+  useEffect(() => {
+    localStorage.setItem("todos", JSON.stringify(todos));
+  }, [todos, newValue]);
 
   const handleCompleteTodo = (receivedIndex) => {
     const updatedData = todos.map((i, index) => {
@@ -54,8 +64,10 @@ const App = () => {
     ]);
     setValue("");
   };
-  
+
   const handleFinishEdit = (todo) => {
+    const savedTodos = localStorage.getItem("todos");
+    console.log(savedTodos, "savedTodos");
     setTodos((prevState) => [
       ...prevState,
       { text: newValue, isCompleted: false, isEdit: false },
@@ -99,7 +111,9 @@ const App = () => {
                     </button>
                     <button onClick={() => handleEditTodo(index)}>Edit</button>
 
-                    <button onClick={() => handleRemoveTodo(index)}>Delete</button>
+                    <button onClick={() => handleRemoveTodo(index)}>
+                      Delete
+                    </button>
                   </>
                 )}
               </li>
