@@ -1,18 +1,34 @@
 import React from "react";
 import ReactDOM from "react-dom";
-import "./index.css";
-import App from "./App";
-import reportWebVitals from "./reportWebVitals";
+import { Provider } from "react-redux";
 import "../node_modules/antd/dist/antd.css";
+import SignUp from './signUp'
+
+import "./index.css";
+
+import App from "./App"
+import { BrowserRouter, Link, Route, Routes } from 'react-router-dom';
+import Practise from './practise'
+import { store } from "./redux";
+
+const rootElement = document.getElementById("root");
 
 ReactDOM.render(
-  <React.StrictMode>
-    <App />
-  </React.StrictMode>,
-  document.getElementById("root")
-);
+  <Provider store={store}>
+    <BrowserRouter>
+      <nav>
+        <ul>
+          <li><Link to="/home">TODO</Link></li>
+          <li><Link to="/practise">APICALL</Link></li>
+          <li><Link to="/signup">SignUpWithRedux</Link></li>
+        </ul>
+      </nav>
+      <Routes>
+        <Route path="/home" element={<App/>} />
+        <Route path="/practise" element={<Practise/>} />
+        <Route path="/signup" element={<SignUp/>} />
 
-// If you want to start measuring performance in your app, pass a function
-// to log results (for example: reportWebVitals(console.log))
-// or send to an analytics endpoint. Learn more: https://bit.ly/CRA-vitals
-reportWebVitals();
+      </Routes>
+    </BrowserRouter>
+  </Provider>
+  , rootElement);
